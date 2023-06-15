@@ -27,6 +27,7 @@
                                  Country = c.Name,
                                  Region = r.Name
                              }).Take(5);
+            Console.Clear();
             foreach (var emp in employess)
             {
                 Console.WriteLine();
@@ -35,7 +36,7 @@
                 Console.WriteLine($"Email\t\t : {emp.Email}");
                 Console.WriteLine($"Phone Number\t : {emp.Phone}");
                 Console.WriteLine($"Salary\t\t : {emp.Salary}");
-                Console.WriteLine($"Department Name : {emp.Department}");
+                Console.WriteLine($"Department Name  : {emp.Department}");
                 Console.WriteLine($"Address\t\t : {emp.Address}");
                 Console.WriteLine($"Country\t\t : {emp.Country}");
                 Console.WriteLine($"Region\t\t : {emp.Region}");
@@ -68,8 +69,8 @@
             {
                 Console.WriteLine($"Department Name : {emp.DeptName}");
                 Console.WriteLine($"Total Employee  : {emp.TotalEmployee}");
-                Console.WriteLine($"Min Salary\t : {emp.MinSalary}");
-                Console.WriteLine($"Max Salary\t : {emp.MaxSalary}");
+                Console.WriteLine($"Min Salary\t: {emp.MinSalary}");
+                Console.WriteLine($"Max Salary\t: {emp.MaxSalary}");
                 Console.WriteLine($"Average Salary  : {emp.Average}");
                 Console.WriteLine();
             }
