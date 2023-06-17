@@ -10,17 +10,18 @@ namespace Connectivity
         public int ManagerId { get; set; }
 
         // GetAllLocation : Location
-        public List<Department> GetAllDepartment()
+        public List<Department> GetAll()
         {
 
-            SqlConnection conn = MyConnection.Get();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
             var department = new List<Department>();
             try
             {
 
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_departments";
 
                 using SqlDataReader reader = command.ExecuteReader();
@@ -48,7 +49,7 @@ namespace Connectivity
                 Console.WriteLine(ex.Message);
             }
 
-            conn.Close();
+            connection.Close();
             return department; // Mengembalikan list regions yang berisi objek-objek Region
         }
 
@@ -59,7 +60,7 @@ namespace Connectivity
             // GetAllDepartment : Department
             Console.Clear();
             Console.WriteLine("     All Data Department     ");
-            List<Department> departments = GetAllDepartment();
+            List<Department> departments = GetAll();
             foreach (Department department in departments)
             {
 

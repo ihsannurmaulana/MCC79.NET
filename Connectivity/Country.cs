@@ -11,15 +11,16 @@ namespace Connectivity
 
 
         // GetAllCountry : Country
-        public List<Country> GetAllCountry()
+        public List<Country> GetAll()
         {
-            SqlConnection conn = MyConnection.Get();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
             var country = new List<Country>();
             try
             {
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_countries";
 
                 using SqlDataReader reader = command.ExecuteReader();
@@ -44,22 +45,23 @@ namespace Connectivity
             {
                 Console.WriteLine(ex.Message);
             }
-            conn.Close();
+            connection.Close();
             return country; // Mengembalikan list regions yang berisi objek-objek Region
         }
 
         // GetCountryByID : Country
-        public List<Country> GetCountryByID(string id)
+        public List<Country> GetByID(string id)
         {
 
-            SqlConnection conn = MyConnection.Get();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
             var countries = new List<Country>();
             try
             {
 
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_countries WHERE Id = @Id";
                 command.Parameters.AddWithValue("@Id", id);
 
@@ -86,7 +88,7 @@ namespace Connectivity
                 Console.WriteLine(ex.Message);
             }
 
-            conn.Close();
+            connection.Close();
             return countries; // Mengembalikan list countries yang berisi objek-objek Country
         }
 
@@ -95,13 +97,14 @@ namespace Connectivity
         {
             int result = 0;
 
-            SqlConnection conn = MyConnection.Get();
-            SqlTransaction transaction = conn.BeginTransaction();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
+            SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "Insert Into tb_m_countries (id, name, region_id) VALUES (@countries_id, @countries_name, @countries_region_id)";
                 command.Transaction = transaction;
 
@@ -144,7 +147,7 @@ namespace Connectivity
                 }
             }
 
-            conn.Close();
+            connection.Close();
             return result;
         }
 
@@ -153,13 +156,14 @@ namespace Connectivity
         {
             int result = 0;
 
-            SqlConnection conn = MyConnection.Get();
-            SqlTransaction transaction = conn.BeginTransaction();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
+            SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "UPDATE tb_m_countries SET id = @id, name = @newName, region_id = @region_id WHERE Id = @id";
                 command.Transaction = transaction;
 
@@ -201,7 +205,7 @@ namespace Connectivity
                 }
             }
 
-            conn.Close();
+            connection.Close();
             return result;
         }
 
@@ -210,13 +214,14 @@ namespace Connectivity
         {
             int result = 0;
 
-            SqlConnection conn = MyConnection.Get();
-            SqlTransaction transaction = conn.BeginTransaction();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
+            SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "DELETE FROM tb_m_countries WHERE Id = @id";
                 command.Transaction = transaction;
 
@@ -246,67 +251,73 @@ namespace Connectivity
                 }
             }
 
-            conn.Close();
+            connection.Close();
             return result;
         }
 
         // Menu
         public void CountryMenu()
         {
-            Menu mMenu = new Menu();
-            // GetALl Rgeion : Region
-            Console.Clear();
-            Console.WriteLine("       GetAll Region      ");
-            Console.WriteLine("--------------------------");
-            List<Country> countries = GetAllCountry();
-            foreach (Country country in countries)
+            SqlConnection connection = MyConnection.Get();
+
+            bool isFinish = true;
+            do
             {
-                Console.WriteLine("Id : " + country.Id + ", Name : " + country.Name + ", Region ID : " + country.RegionId);
-            }
-
-            Console.WriteLine("\n");
-            Console.WriteLine("        Menu      ");
-            Console.WriteLine("------------------");
-            Console.WriteLine("1. GetById");
-            Console.WriteLine("2. Insert");
-            Console.WriteLine("3. Update");
-            Console.WriteLine("4. Delete");
-            Console.WriteLine("5. Back");
-
-            try
-            {
-
-
-                Console.Write("Select Menu : ");
-                int InputPilihan = int.Parse(Console.ReadLine());
-
-                switch (InputPilihan)
+                // GetALl Country : Country
+                Console.Clear();
+                Console.WriteLine("       GetAll Country      ");
+                Console.WriteLine("--------------------------");
+                connection.Open();
+                List<Country> countries = GetAll();
+                foreach (Country country in countries)
                 {
-                    case 1:
-                        MenuGetByID();
-                        break;
-                    case 2:
-                        InsertMenu();
-                        break;
-                    case 3:
-                        UpdateMenu();
-                        break;
-                    case 4:
-                        DeleteMenu();
-                        break;
-                    case 5:
-                        mMenu.MainMenu();
-                        break;
-                    default:
-                        Console.WriteLine("Invalid Input");
-                        CountryMenu();
-                        break;
+                    Console.WriteLine("Id : " + country.Id + ", Name : " + country.Name + ", Region ID : " + country.RegionId);
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+
+                Console.WriteLine("\n");
+                Console.WriteLine("        Menu      ");
+                Console.WriteLine("------------------");
+                Console.WriteLine("1. GetById");
+                Console.WriteLine("2. Insert");
+                Console.WriteLine("3. Update");
+                Console.WriteLine("4. Delete");
+                Console.WriteLine("5. Back");
+
+                try
+                {
+
+
+                    Console.Write("Select Menu : ");
+                    int InputPilihan = int.Parse(Console.ReadLine());
+
+                    switch (InputPilihan)
+                    {
+                        case 1:
+                            MenuGetByID();
+                            break;
+                        case 2:
+                            InsertMenu();
+                            break;
+                        case 3:
+                            UpdateMenu();
+                            break;
+                        case 4:
+                            DeleteMenu();
+                            break;
+                        case 5:
+                            isFinish = false;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid Input");
+                            CountryMenu();
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            } while (isFinish);
         }
 
         public void MenuGetByID()
@@ -315,7 +326,7 @@ namespace Connectivity
             Console.WriteLine("------------------------");
             Console.Write("Select country By ID : ");
             string id = Console.ReadLine();
-            List<Country> countries = GetCountryByID(id);
+            List<Country> countries = GetByID(id);
             foreach (Country country in countries)
             {
                 Console.WriteLine("Id : " + country.Id + ", Name : " + country.Name + ", Region ID : " + country.RegionId);

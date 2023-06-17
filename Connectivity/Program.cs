@@ -1,4 +1,12 @@
 ﻿
 // Untuk memanggil menu 
-using Connectivity;
-new Menu().MainMenu();
+namespace Connectivity
+{
+    class Program
+    {
+        static void Main()
+        {
+            new Menu().MainMenu();
+        }
+    }
+}

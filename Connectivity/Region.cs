@@ -8,20 +8,21 @@ namespace Connectivity
         public int Id { get; set; }
         public string Name { get; set; }
 
-        SqlConnection conn = MyConnection.Get();
+        //SqlConnection conn = MyConnection.Get();
 
         // GetAllRegion : Region
-        public List<Region> GetAllRegion()
+        public List<Region> GetAll()
         {
 
-            SqlConnection conn = MyConnection.Get();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
             var region = new List<Region>();
             try
             {
 
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_regions";
 
                 using SqlDataReader reader = command.ExecuteReader();
@@ -46,22 +47,23 @@ namespace Connectivity
                 Console.WriteLine(ex.Message);
             }
 
-            conn.Close();
+            connection.Close();
             return region; // Mengembalikan list regions yang berisi objek-objek Region
         }
 
         // GetRegionByID
-        public List<Region> GetRegionByID(int id)
+        public List<Region> GetByID(int id)
         {
 
-            SqlConnection conn = MyConnection.Get();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
             var region = new List<Region>();
             try
             {
 
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_regions WHERE Id = @Id";
                 command.Parameters.AddWithValue("@Id", id);
 
@@ -87,22 +89,23 @@ namespace Connectivity
                 Console.WriteLine(ex.Message);
             }
 
-            conn.Close();
+            connection.Close();
             return region; // Mengembalikan list regions yang berisi objek-objek Region
         }
 
         // Insert Region : Region
-        public int InsertRegion(string name)
+        public int Insert(string name)
         {
             int result = 0;
 
-            SqlConnection conn = MyConnection.Get();
-            SqlTransaction transaction = conn.BeginTransaction();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
+            SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "Insert Into tb_m_regions (name) VALUES (@region_name)";
                 command.Transaction = transaction;
 
@@ -132,23 +135,24 @@ namespace Connectivity
                 }
             }
 
-            conn.Close();
+            connection.Close();
             return result;
 
         }
 
         // Update Region : Region
-        public int UpdateRegion(int id, string newName)
+        public int Update(int id, string newName)
         {
             int result = 0;
 
-            SqlConnection conn = MyConnection.Get();
-            SqlTransaction transaction = conn.BeginTransaction();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
+            SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "UPDATE tb_m_regions SET name = @newName WHERE Id = @id";
                 command.Transaction = transaction;
 
@@ -184,22 +188,23 @@ namespace Connectivity
                 }
             }
 
-            conn.Close();
+            connection.Close();
             return result;
         }
 
         // Delete Region : Region
-        public int DeleteRegion(int id)
+        public int Delete(int id)
         {
             int result = 0;
 
-            SqlConnection conn = MyConnection.Get();
-            SqlTransaction transaction = conn.BeginTransaction();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
+            SqlTransaction transaction = connection.BeginTransaction();
             try
             {
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "DELETE FROM tb_m_regions WHERE Id = @id";
                 command.Transaction = transaction;
 
@@ -229,7 +234,7 @@ namespace Connectivity
                 }
             }
 
-            conn.Close();
+            connection.Close();
             return result;
         }
 
@@ -241,13 +246,13 @@ namespace Connectivity
             Console.WriteLine("------------------------");
             Console.Write("Select region By ID : ");
             int id = int.Parse(Console.ReadLine());
-            List<Region> regions = GetRegionByID(id);
+            List<Region> regions = GetByID(id);
             foreach (Region region in regions)
             {
                 Console.WriteLine("Id : " + region.Id + ", Name : " + region.Name);
             }
             Console.ReadKey();
-            RegionMenu();
+            //RegionMenu();
         }
 
         // Menu Insert Region
@@ -257,7 +262,7 @@ namespace Connectivity
             Console.WriteLine("----------------- ");
             Console.Write("Add new name region : ");
             string name = Console.ReadLine();
-            int isInsertSuccessful = InsertRegion(name);
+            int isInsertSuccessful = Insert(name);
             if (isInsertSuccessful > 0)
             {
                 Console.WriteLine("Data added successfully");
@@ -267,7 +272,7 @@ namespace Connectivity
                 Console.WriteLine("Data failed to add");
             }
             Console.ReadKey();
-            RegionMenu();
+            //RegionMenu();
         }
 
         // Menu Update Region 
@@ -281,7 +286,7 @@ namespace Connectivity
             Console.Write("Input the new name for the region: ");
             string newName = Console.ReadLine();
 
-            int updateResult = UpdateRegion(id, newName);
+            int updateResult = Update(id, newName);
             if (updateResult > 0)
             {
                 Console.WriteLine("Data updated successfully");
@@ -291,7 +296,7 @@ namespace Connectivity
                 Console.WriteLine("Failed to update data");
             }
             Console.ReadKey();
-            RegionMenu();
+            //RegionMenu();
         }
 
         // Menu Delete Region
@@ -302,7 +307,7 @@ namespace Connectivity
             Console.Write("Input the ID of the region to delete: ");
             int id = int.Parse(Console.ReadLine());
 
-            int deleteResult = DeleteRegion(id);
+            int deleteResult = Delete(id);
             if (deleteResult > 0)
             {
                 Console.WriteLine("Data deleted successfully");
@@ -312,64 +317,67 @@ namespace Connectivity
                 Console.WriteLine("Failed to delete data");
             }
             Console.ReadKey();
-            RegionMenu();
+            //RegionMenu()
         }
 
         // Menu All Region
-        public void RegionMenu()
+        public void Menu()
         {
-            Menu mMenu = new Menu();
-            // GetALl Rgeion : Region
-            Console.Clear();
-            Console.WriteLine("       GetAll Region      ");
-            Console.WriteLine("--------------------------");
-            List<Region> regions = GetAllRegion();
-            foreach (Region region in regions)
+
+            bool isFinish = true;
+            do
             {
-                Console.WriteLine("Id : " + region.Id + ", Name : " + region.Name);
-            }
-
-            Console.WriteLine("\n");
-            Console.WriteLine("     Menu     ");
-            Console.WriteLine("--------------");
-            Console.WriteLine("1. GetById");
-            Console.WriteLine("2. Insert");
-            Console.WriteLine("3. Update");
-            Console.WriteLine("4. Delete");
-            Console.WriteLine("5. Exit");
-
-            try
-            {
-                Console.Write("Select Menu : ");
-                int InputPilihan = int.Parse(Console.ReadLine());
-
-                switch (InputPilihan)
+                // GetALl Rgeion : Region
+                Console.Clear();
+                Console.WriteLine("       GetAll Region      ");
+                Console.WriteLine("--------------------------");
+                List<Region> regions = GetAll();
+                foreach (Region region in regions)
                 {
-                    case 1:
-                        MenuGetByID();
-                        break;
-                    case 2:
-                        InsertMenu();
-                        break;
-                    case 3:
-                        UpdateMenu();
-                        break;
-                    case 4:
-                        DeleteMenu();
-                        break;
-                    case 5:
-                        mMenu.MainMenu();
-                        break;
-                    default:
-                        Console.WriteLine("Invalid input");
-                        RegionMenu();
-                        break;
+                    Console.WriteLine("Id : " + region.Id + ", Name : " + region.Name);
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+
+                Console.WriteLine("\n");
+                Console.WriteLine("     Menu     ");
+                Console.WriteLine("--------------");
+                Console.WriteLine("1. GetById");
+                Console.WriteLine("2. Insert");
+                Console.WriteLine("3. Update");
+                Console.WriteLine("4. Delete");
+                Console.WriteLine("5. Exit");
+
+                try
+                {
+                    Console.Write("Select Menu : ");
+                    int InputPilihan = int.Parse(Console.ReadLine());
+
+                    switch (InputPilihan)
+                    {
+                        case 1:
+                            MenuGetByID();
+                            break;
+                        case 2:
+                            InsertMenu();
+                            break;
+                        case 3:
+                            UpdateMenu();
+                            break;
+                        case 4:
+                            DeleteMenu();
+                            break;
+                        case 5:
+                            isFinish = false;
+                            break;
+                        default:
+                            Console.WriteLine("Invalid input");
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            } while (isFinish);
 
         }
     }

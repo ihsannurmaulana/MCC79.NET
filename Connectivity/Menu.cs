@@ -4,15 +4,7 @@ namespace Connectivity
 {
     public class Menu
     {
-        SqlConnection conn = MyConnection.Get();
-        Country con = new Country();
-        Region reg = new Region();
-        Location loc = new Location();
-        Jobs jobs = new Jobs();
-        Department dept = new Department();
-        Employee emp = new Employee();
-        History his = new History();
-        Linq linq = new Linq();
+        SqlConnection connection = MyConnection.Get();
 
 
         public void MainMenu()
@@ -37,28 +29,28 @@ namespace Connectivity
                 switch (InputPilihan)
                 {
                     case 1:
-                        con.CountryMenu();
+                        new Country().CountryMenu();
                         break;
                     case 2:
-                        reg.RegionMenu();
+                        new Region().Menu();
                         break;
                     case 3:
-                        loc.LocationMenu();
+                        new Location().LocationMenu();
                         break;
                     case 4:
-                        jobs.JobMenu();
+                        new Jobs().JobMenu();
                         break;
                     case 5:
-                        dept.DepartmentMenu();
+                        new Department().DepartmentMenu();
                         break;
                     case 6:
-                        emp.EmployeeMenu();
+                        new Employee().EmployeeMenu();
                         break;
                     case 7:
-                        his.HistoryMenu();
+                        new History().HistoryMenu();
                         break;
                     case 8:
-                        linq.LinqMenu();
+                        new Linq().LinqMenu();
                         break;
                     case 9:
                         Environment.Exit(0);

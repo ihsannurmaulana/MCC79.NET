@@ -1,8 +1,10 @@
-﻿using System.Data.SqlClient;
+﻿using BasicMVC.Context;
+using BasicMVC.Views;
+using System.Data.SqlClient;
 
-namespace Connectivity
+namespace BasicMVC.Models
 {
-    class History
+    public class History
     {
         public DateTime StartDate { get; set; }
         public int EmployeeId { get; set; }
@@ -14,7 +16,7 @@ namespace Connectivity
         public List<History> GetAll()
         {
 
-            SqlConnection connection = MyConnection.Get();
+            SqlConnection connection = Connectivity.Connection();
             connection.Open();
             var history = new List<History>();
             try
@@ -42,7 +44,7 @@ namespace Connectivity
                 }
                 else
                 {
-                    Console.WriteLine("Data not found!");
+                    new MainView().NotFound();
                 }
                 reader.Close();
             }
@@ -53,23 +55,6 @@ namespace Connectivity
 
             connection.Close();
             return history; // Mengembalikan list regions yang berisi objek-objek Region
-        }
-
-        public void HistoryMenu()
-        {
-            // GetAllHistoy : Histories
-            Console.Clear();
-            Console.WriteLine("     All Data Histories     ");
-            Console.WriteLine("----------------------------");
-            List<History> histories = GetAll();
-            foreach (History history in histories)
-            {
-
-                Console.WriteLine("Employee_ID : " + history.EmployeeId + ", Start_Date : " + history.StartDate + ", End_Date : " + history.EndDate + ",  Department ID : " + history.DepartmentId + ", Job_ID : " + history.JobId);
-            }
-            Console.WriteLine("Press enter to return to the Main Menu");
-            Console.ReadKey();
-            new Menu().MainMenu();
         }
     }
 }

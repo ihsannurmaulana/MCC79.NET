@@ -12,13 +12,12 @@ namespace Connectivity
             var location = new Location();
             var country = new Country();
             var region = new Region();
-
             // Method Syntax
-            var employees = employee.GetAllEmployee()
-                            .Join(department.GetAllDepartment(), e => e.DepartmentId, d => d.Id, (e, d) => new { e, d })
-                            .Join(location.GetAllLocation(), ed => ed.d.LocationId, l => l.Id, (ed, l) => new { ed.e, ed.d, l })
-                            .Join(country.GetAllCountry(), edl => edl.l.CountryId, c => c.Id, (edl, c) => new { edl.e, edl.d, edl.l, c })
-                            .Join(region.GetAllRegion(), edlc => edlc.c.RegionId, r => r.Id, (edlc, r) => new { edlc.e, edlc.d, edlc.l, edlc.c, r })
+            var employees = employee.GetAll()
+                            .Join(department.GetAll(), e => e.DepartmentId, d => d.Id, (e, d) => new { e, d })
+                            .Join(location.GetAll(), ed => ed.d.LocationId, l => l.Id, (ed, l) => new { ed.e, ed.d, l })
+                            .Join(country.GetAll(), edl => edl.l.CountryId, c => c.Id, (edl, c) => new { edl.e, edl.d, edl.l, c })
+                            .Join(region.GetAll(), edlc => edlc.c.RegionId, r => r.Id, (edlc, r) => new { edlc.e, edlc.d, edlc.l, edlc.c, r })
                             .Select(emp => new
                             {
                                 ID = emp.e.Id,
@@ -77,8 +76,8 @@ namespace Connectivity
             var department = new Department();
 
             // Method Syntax
-            var employees = department.GetAllDepartment()
-                            .Join(employee.GetAllEmployee(), d => d.Id, e => e.DepartmentId, (d, e) => new { Department = d, Employee = e })
+            var employees = department.GetAll()
+                            .Join(employee.GetAll(), d => d.Id, e => e.DepartmentId, (d, e) => new { Department = d, Employee = e })
                             .GroupBy(x => x.Department.Name)
                             .Where(g => g.Count() > 3)
                             .Select(g => new
@@ -89,7 +88,6 @@ namespace Connectivity
                                 MaxSalary = g.Max(e => e.Employee.Salary),
                                 Average = g.Average(e => e.Employee.Salary)
                             });
-
 
             // Query Syntax
             /*var employees = from d in department.GetAllDepartment()

@@ -17,17 +17,18 @@ namespace Connectivity
         public int DepartmentId { get; set; }
 
         // GetAllLocation : Location
-        public List<Employee> GetAllEmployee()
+        public List<Employee> GetAll()
         {
 
-            SqlConnection conn = MyConnection.Get();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
             var employee = new List<Employee>();
             try
             {
 
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_employees";
 
                 using SqlDataReader reader = command.ExecuteReader();
@@ -62,7 +63,7 @@ namespace Connectivity
                 Console.WriteLine(ex.Message);
             }
 
-            conn.Close();
+            connection.Close();
             return employee; // Mengembalikan list regions yang berisi objek-objek Region
         }
 
@@ -70,9 +71,10 @@ namespace Connectivity
         {
             Menu mMenu = new Menu();
             // GetAllEmployee : Employee
+            Console.Clear();
             Console.WriteLine("      All Data Employee     ");
             Console.WriteLine("----------------------------");
-            List<Employee> employees = GetAllEmployee();
+            List<Employee> employees = GetAll();
             foreach (Employee employee in employees)
             {
 

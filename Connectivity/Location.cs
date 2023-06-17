@@ -14,17 +14,18 @@ namespace Connectivity
 
 
         // GetAllLocation : Location
-        public List<Location> GetAllLocation()
+        public List<Location> GetAll()
         {
 
-            SqlConnection conn = MyConnection.Get();
+            SqlConnection connection = MyConnection.Get();
+            connection.Open();
             var location = new List<Location>();
             try
             {
 
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
-                command.Connection = conn;
+                command.Connection = connection;
                 command.CommandText = "SELECT * FROM tb_m_locations";
 
                 using SqlDataReader reader = command.ExecuteReader();
@@ -54,7 +55,7 @@ namespace Connectivity
                 Console.WriteLine(ex.Message);
             }
 
-            conn.Close();
+            connection.Close();
             return location; // Mengembalikan list regions yang berisi objek-objek Region
         }
 
@@ -63,7 +64,7 @@ namespace Connectivity
             Menu mMenu = new Menu();
             Console.Clear();
             Console.WriteLine("     All Data Location     ");
-            List<Location> locations = GetAllLocation();
+            List<Location> locations = GetAll();
             foreach (Location location in locations)
             {
 

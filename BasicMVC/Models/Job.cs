@@ -1,21 +1,24 @@
-﻿using System.Data.SqlClient;
+﻿using BasicMVC.Context;
+using BasicMVC.Views;
+using System.Data.SqlClient;
 
-namespace Connectivity
+namespace BasicMVC.Models
 {
-    class Jobs
+    public class Job
     {
         public string Id { get; set; }
         public string Title { get; set; }
         public int MinSalary { get; set; }
         public int MaxSalary { get; set; }
 
-        // GetAllLocation : Location
-        public List<Jobs> GetAll()
-        {
+        private MainView _mainView = new MainView();
 
-            SqlConnection connection = MyConnection.Get();
+        // GetAllLocation : Location
+        public List<Job> GetAll()
+        {
+            SqlConnection connection = Connectivity.Connection();
             connection.Open();
-            var jobs = new List<Jobs>();
+            var jobs = new List<Job>();
             try
             {
 
@@ -29,7 +32,7 @@ namespace Connectivity
                 {
                     while (reader.Read())
                     {
-                        var job = new Jobs();
+                        var job = new Job();
                         job.Id = reader.GetString(0);
                         job.Title = reader.GetString(1);
                         job.MinSalary = reader.GetInt32(2);
@@ -40,7 +43,7 @@ namespace Connectivity
                 }
                 else
                 {
-                    Console.WriteLine("Data not found!");
+                    _mainView.NotFound();
                 }
                 reader.Close();
             }
@@ -51,22 +54,6 @@ namespace Connectivity
 
             connection.Close();
             return jobs; // Mengembalikan list regions yang berisi objek-objek Region
-        }
-
-        public void JobMenu()
-        {
-            Menu menu = new Menu();
-            // GetAll Jobs : Job
-            Console.Clear();
-            Console.WriteLine("     All Data Jobs\n     ");
-            List<Jobs> jobs = GetAll();
-            foreach (Jobs job in jobs)
-            {
-                Console.WriteLine("");
-                Console.WriteLine("ID : " + job.Id + ", Title : " + job.Title + ", Min Salary : " + job.MinSalary + ",  Max Salary : " + job.MaxSalary);
-            }
-            Console.ReadKey();
-            menu.MainMenu();
         }
     }
 }
