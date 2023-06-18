@@ -4,18 +4,6 @@ namespace BasicMVC.Views
 {
     public class CountryView
     {
-        public void Menu()
-        {
-            Console.WriteLine("\n");
-            Console.WriteLine("     Menu     ");
-            Console.WriteLine("--------------");
-            Console.WriteLine("1. GetById");
-            Console.WriteLine("2. Insert");
-            Console.WriteLine("3. Update");
-            Console.WriteLine("4. Delete");
-            Console.WriteLine("5. Exit");
-            Console.Write("Select Menu : ");
-        }
         public void DisplayAll(List<Country> countries)
         {
             Console.Clear();

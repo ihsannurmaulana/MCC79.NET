@@ -6,6 +6,7 @@ namespace BasicMVC.Controllers
     public class CountryController
     {
         private Country _country = new Country();
+        private MessageView _messageView = new MessageView();
         private CountryView _countryView = new CountryView();
         private MainView _mainView = new MainView();
 
@@ -17,7 +18,7 @@ namespace BasicMVC.Controllers
             {
                 var countries = _country.GetAll();
                 _countryView.DisplayAll(countries);
-                _countryView.Menu();
+                _mainView.DisplaySubMenu();
 
                 int InputPilihan = int.Parse(Console.ReadLine());
 
@@ -60,7 +61,7 @@ namespace BasicMVC.Controllers
             var country = _country.GetByID(id);
             if (country == null)
             {
-                _mainView.NotFound();
+                _messageView.NotFound();
             }
             else
             {
@@ -81,11 +82,11 @@ namespace BasicMVC.Controllers
             int status = _country.Insert(id, name, regionId);
             if (status != 0)
             {
-                _mainView.SuccessInsert();
+                _messageView.SuccessInsert();
             }
             else
             {
-                _mainView.NotFound();
+                _messageView.NotFound();
             }
             Console.ReadLine();
         }
@@ -103,11 +104,11 @@ namespace BasicMVC.Controllers
             int status = _country.Update(id, name, regionId);
             if (status != 0)
             {
-                _mainView.SuccessUpdate();
+                _messageView.SuccessUpdate();
             }
             else
             {
-                _mainView.NotFound();
+                _messageView.NotFound();
             }
             Console.ReadLine();
         }
@@ -120,11 +121,11 @@ namespace BasicMVC.Controllers
             int status = _country.Delete(id);
             if (status != 0)
             {
-                _mainView.SuccessDelete();
+                _messageView.SuccessDelete();
             }
             else
             {
-                _mainView.NotFound();
+                _messageView.NotFound();
             }
             Console.ReadLine();
         }

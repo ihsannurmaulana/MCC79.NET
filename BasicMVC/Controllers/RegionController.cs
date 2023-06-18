@@ -6,8 +6,9 @@ namespace BasicMVC.Controllers
     public class RegionController
     {
         private Region _region = new Region();
-        private MainView _mainView = new MainView();
+        private MessageView _messageView = new MessageView();
         private RegionView _regionView = new RegionView();
+        private MainView _mainView = new MainView();
 
         public void MenuController()
         {
@@ -16,7 +17,7 @@ namespace BasicMVC.Controllers
             {
                 var regions = _region.GetAll();
                 _regionView.DisplayAll(regions);
-                _regionView.Menu();
+                _mainView.DisplayMainMenu();
 
                 int InputPilihan = int.Parse(Console.ReadLine());
 
@@ -60,7 +61,7 @@ namespace BasicMVC.Controllers
 
             if (region == null)
             {
-                _mainView.NotFound();
+                _messageView.NotFound();
             }
             else
             {
@@ -77,11 +78,11 @@ namespace BasicMVC.Controllers
             int status = _region.Insert(name);
             if (status != 0)
             {
-                _mainView.SuccessInsert();
+                _messageView.SuccessInsert();
             }
             else
             {
-                _mainView.FailedInsert();
+                _messageView.FailedInsert();
             }
             Console.ReadLine();
         }
@@ -96,11 +97,11 @@ namespace BasicMVC.Controllers
             int status = _region.Update(id, name);
             if (status != 0)
             {
-                _mainView.SuccessUpdate();
+                _messageView.SuccessUpdate();
             }
             else
             {
-                _mainView.FailedUpdate();
+                _messageView.FailedUpdate();
             }
             Console.ReadLine();
         }
@@ -113,11 +114,11 @@ namespace BasicMVC.Controllers
             int status = _region.Delete(id);
             if (status != 0)
             {
-                _mainView.SuccessDelete();
+                _messageView.SuccessDelete();
             }
             else
             {
-                _mainView.FailedDelete();
+                _messageView.FailedDelete();
             }
             Console.ReadLine();
         }

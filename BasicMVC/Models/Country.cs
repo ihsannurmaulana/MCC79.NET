@@ -81,7 +81,7 @@ namespace BasicMVC.Models
             }
             catch (Exception ex)
             {
-                MainView.ErrorHandling(ex);
+                MessageView.ErrorHandling(ex);
             }
 
             connection.Close();
@@ -188,7 +188,7 @@ namespace BasicMVC.Models
             }
             catch (Exception ex)
             {
-                MainView.ErrorHandling(ex);
+                MessageView.ErrorHandling(ex);
                 try
                 {
                     transaction.Rollback();
