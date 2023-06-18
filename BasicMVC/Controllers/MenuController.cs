@@ -5,37 +5,44 @@ namespace BasicMVC.Controllers
     public class MenuController
     {
         private MainView _menuView = new MainView();
+        private CountryController _countryController = new CountryController();
+        private RegionController _regionController = new RegionController();
+        private LocationController _location = new LocationController();
+        private JobController _jobController = new JobController();
+        private DepartmentController _departmentController = new DepartmentController();
+        private EmployeeController _employeeController = new EmployeeController();
+        private HistoryController _historyController = new HistoryController();
 
         public void MainMenu()
         {
             _menuView.DisplayMainMenu();
-            try
-            {
-                Console.Write("Select Tabel: ");
-                int inputPilihan = Convert.ToInt32(Console.ReadLine());
+            int inputPilihan = Convert.ToInt32(Console.ReadLine());
 
+            bool isFinish = true;
+            do
+            {
                 switch (inputPilihan)
                 {
                     case 1:
-                        new CountryController().GetAll();
+                        _countryController.MenuController();
                         break;
                     case 2:
-                        new RegionController().GetAll();
+                        _regionController.MenuController();
                         break;
                     case 3:
-                        new LocationController().GetAll();
+                        _location.GetAll();
                         break;
                     case 4:
-                        new JobController().GetAll();
+                        _jobController.GetAll();
                         break;
                     case 5:
-                        new DepartmentController().GetAll();
+                        _departmentController.GetAll();
                         break;
                     case 6:
-                        new EmployeeController().GetAll();
+                        _employeeController.GetAll();
                         break;
                     case 7:
-                        new HistoryController().GetAll();
+                        _historyController.GetAll();
                         break;
                     //case 8:
                     //    new LinqController().LinqMenu();
@@ -50,11 +57,8 @@ namespace BasicMVC.Controllers
 
                 Console.ReadKey();
                 MainMenu();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            } while (isFinish);
+
         }
     }
 }
