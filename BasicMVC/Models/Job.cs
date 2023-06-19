@@ -12,6 +12,7 @@ namespace BasicMVC.Models
         public int MaxSalary { get; set; }
 
         private MainView _mainView = new MainView();
+        private MessageView _messageView = new MessageView();
 
         // GetAllLocation : Location
         public List<Job> GetAll()
@@ -43,7 +44,7 @@ namespace BasicMVC.Models
                 }
                 else
                 {
-                    _mainView.NotFound();
+                    _messageView.NotFound();
                 }
                 reader.Close();
             }

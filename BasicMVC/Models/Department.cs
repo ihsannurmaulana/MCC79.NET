@@ -40,7 +40,7 @@ namespace BasicMVC.Models
                 }
                 else
                 {
-                    new MainView().NotFound();
+                    new MessageView().NotFound();
                 }
                 reader.Close();
             }

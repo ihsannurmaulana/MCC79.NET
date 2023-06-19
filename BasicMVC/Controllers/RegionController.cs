@@ -17,7 +17,7 @@ namespace BasicMVC.Controllers
             {
                 var regions = _region.GetAll();
                 _regionView.DisplayAll(regions);
-                _mainView.DisplayMainMenu();
+                _mainView.DisplaySubMenu();
 
                 int InputPilihan = int.Parse(Console.ReadLine());
 

@@ -192,6 +192,7 @@ namespace BasicMVC.Models
             SqlTransaction transaction = connection.BeginTransaction();
             try
             {
+
                 // Membuat instance untuk command
                 SqlCommand command = new SqlCommand();
                 command.Connection = connection;
